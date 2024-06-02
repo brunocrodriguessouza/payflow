@@ -1,6 +1,6 @@
-package com.brunosouza.payflow.domain.account;
+package com.brunosouza.payflow.application.dto;
 
-import jakarta.persistence.*;
+import com.brunosouza.payflow.domain.account.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,26 +9,16 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@Table(name = "accounts")
-public class Account {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AccountDTO {
     private Long id;
-
     private LocalDate dueDate;
-
     private LocalDate paymentDate;
-
     private BigDecimal value;
-
     private String description;
-
-    private String status;
+    private Status status;
 
 }
