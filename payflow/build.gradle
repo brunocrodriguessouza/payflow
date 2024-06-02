@@ -3,7 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '3.3.0'
 	id 'io.spring.dependency-management' version '1.1.5'
 	id 'org.flywaydb.flyway' version '10.13.0'
-	//id 'io.freefair.lombok' version '5.1.0'
+	id 'io.freefair.lombok' version '6.5.1'
 }
 
 group = 'com.brunosouza'
@@ -26,8 +26,8 @@ dependencies {
 	implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.13.0'
 	runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.13.0'
 	implementation 'org.postgresql:postgresql:42.2.16'
-	//compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
-	//annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
+	compileOnly 'org.projectlombok:lombok:1.18.32'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
 }
 
