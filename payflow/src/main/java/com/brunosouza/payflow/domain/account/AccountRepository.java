@@ -1,6 +1,5 @@
-package com.brunosouza.payflow.domain.repository;
+package com.brunosouza.payflow.domain.account;
 
-import com.brunosouza.payflow.domain.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {

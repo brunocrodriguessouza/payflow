@@ -2,8 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.0'
 	id 'io.spring.dependency-management' version '1.1.5'
-	id 'org.flywaydb.flyway' version '7.15.0'
-	id 'io.freefair.lombok' version '5.1.0'
+	id 'org.flywaydb.flyway' version '10.13.0'
+	//id 'io.freefair.lombok' version '5.1.0'
 }
 
 group = 'com.brunosouza'
@@ -20,10 +20,15 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	runtimeOnly 'org.flywaydb:flyway-core'
-	compileOnly 'org.projectlombok:lombok'
+	implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.13.0'
+	runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.13.0'
+	implementation 'org.postgresql:postgresql:42.2.16'
+	//compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
+	//annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
+
 }
 
 tasks.named('test') {
@@ -31,9 +36,9 @@ tasks.named('test') {
 }
 
 // Flyway Configuration
-//flyway {
-//	url = 'jdbc:postgresql://localhost:5432/payflow' // URL do banco de dados
-//	user = 'seuUsuario' // Usuário do banco de dados
-//	password = 'suaSenha' // Senha do banco de dados
-//	locations = ['filesystem:src/main/resources/db/migration'] // Localização dos scripts de migração
-//}
+flyway {
+	url = 'jdbc:postgresql://localhost:5432/payflow'
+	user = 'admin'
+	password = 'admin'
+	locations = ['filesystem:src/main/resources/db/migration'] // Localização dos scripts de migração
+}

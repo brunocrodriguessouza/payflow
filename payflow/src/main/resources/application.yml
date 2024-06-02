@@ -1,6 +1,6 @@
-spring.application.name=PayFlow
-
 spring:
+    application:
+        name=PayFlow
     datasource:
         url: jdbc:postgresql://localhost:5432/payflowdb
         username: admin
