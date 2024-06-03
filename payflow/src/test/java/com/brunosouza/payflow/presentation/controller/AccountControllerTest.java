@@ -2,6 +2,7 @@ package com.brunosouza.payflow.presentation.controller;
 
 import com.brunosouza.payflow.application.dto.AccountDTO;
 import com.brunosouza.payflow.application.usecase.account.*;
+import com.brunosouza.payflow.infraestructure.exception.AccountNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 

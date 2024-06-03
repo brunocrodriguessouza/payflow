@@ -3,10 +3,10 @@ package com.brunosouza.payflow.application.usecase.account;
 import com.brunosouza.payflow.domain.account.Account;
 import com.brunosouza.payflow.domain.account.AccountRepository;
 import com.brunosouza.payflow.infraestructure.AccountMapper;
+import com.brunosouza.payflow.infraestructure.exception.AccountNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.util.Optional;
 
 @Service
