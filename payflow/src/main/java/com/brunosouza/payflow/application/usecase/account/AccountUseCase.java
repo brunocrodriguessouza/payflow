@@ -24,10 +24,6 @@ public class AccountUseCase {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 
-    public void deleteAccount(Long id) {
-        accountRepository.deleteById(id);
-    }
-
     public AccountDTO getAccountById(Long id) {
         Optional<Account> account = accountRepository.findById(id);
         return account.map(this::toDTO).orElse(null);

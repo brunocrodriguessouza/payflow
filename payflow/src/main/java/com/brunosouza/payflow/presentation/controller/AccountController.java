@@ -26,13 +26,16 @@ public class AccountController {
     private AddAccountUseCase addAccountUseCase;
 
     @Autowired
-    private UpdateAccountUseCase updateAccount;
+    private UpdateAccountUseCase updateAccountUseCase;
 
     @Autowired
     private ChangeStatusUseCase changeStatusUseCase;
 
     @Autowired
     private ImportCSVUseCase importCSVUseCase;
+
+    @Autowired
+    private RemoveAccountUseCase removeAccountUseCase;
 
     @PostMapping
     public ResponseEntity<AccountDTO> addAccount(@RequestBody AccountDTO accountDTO) {
@@ -67,17 +70,21 @@ public class AccountController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
-        accountUseCase.deleteAccount(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) throws AccountNotFoundException {
+        try{
+            removeAccountUseCase.handle(id);
+            return ResponseEntity.noContent().build();
+        }catch (AccountNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AccountDTO> updateAccount(@PathVariable Long id, @RequestBody AccountDTO accountDTO) {
         try {
-            AccountDTO accountDTOUpdated = updateAccount.handle(id, accountDTO);
+            AccountDTO accountDTOUpdated = updateAccountUseCase.handle(id, accountDTO);
             return ResponseEntity.ok(accountDTOUpdated);
-        } catch (AccountNotFoundException e) {
+        }catch (AccountNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
