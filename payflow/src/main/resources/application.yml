@@ -6,6 +6,9 @@ spring:
         username: admin
         password: admin
         driver-class-name: org.postgresql.Driver
+    flyway:
+        ignore-missing-migrations: true
+        out-of-order: true
 #    security:
 #        user:
 #            name: admin
@@ -17,5 +20,7 @@ jpa:
     hibernate:
         ddl-auto: update
     show-sql: false
+
+
 
 

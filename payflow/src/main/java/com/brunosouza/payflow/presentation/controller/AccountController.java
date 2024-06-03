@@ -55,6 +55,9 @@ public class AccountController {
     @GetMapping
     public ResponseEntity<Page<AccountDTO>> getAllAccounts(Pageable pageable) {
         Page<AccountDTO> accounts = getAccountUseCase.getAllAccounts(pageable);
+        if (accounts.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(accounts);
     }
 
