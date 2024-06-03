@@ -112,7 +112,41 @@
 		{
 			"name": "getAccountById",
 			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/accounts/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteById",
+			"request": {
+				"method": "DELETE",
 				"header": [],
 				"url": {
 					"raw": "localhost:8080/accounts/1",
@@ -162,7 +196,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": 3,\r\n    \"dueDate\": \"2024-02-06\",\r\n    \"paymentDate\": \"2024-02-06\",\r\n    \"value\": 2800.00,\r\n    \"description\": \"carro\",\r\n    \"status\": \"PAID\"\r\n}",
+					"raw": "{\r\n    \"dueDate\": \"2024-06-02\",\r\n    \"paymentDate\": \"2024-06-02\",\r\n    \"value\": 200.00,\r\n    \"description\": \"Roner\",\r\n    \"status\": \"UNPAID\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -170,13 +204,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/accounts",
+					"raw": "localhost:8080/accounts/5",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"accounts"
+						"accounts",
+						"5"
 					]
 				}
 			},
