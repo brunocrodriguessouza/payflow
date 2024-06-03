@@ -20,9 +20,6 @@ public class GetAccountUseCase {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private AccountMapper accountMapper;
-
 
     public AccountDTO getAccountById(Long id) {
         Optional<Account> account = accountRepository.findById(id);
@@ -31,13 +28,6 @@ public class GetAccountUseCase {
 
     public Page<AccountDTO> getAllAccounts(Pageable pageable) {
         return accountRepository.findAll(pageable).map(AccountMapper::convertToDTO);
-    }
-
-    public BigDecimal findTotalValuePaidByPeriod(String startDate, String endDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate startDt = LocalDate.parse(startDate, formatter);
-        LocalDate endDt = LocalDate.parse(endDate, formatter);
-        return accountRepository.findTotalValuePaidByPeriod(startDt, endDt);
     }
 
 }

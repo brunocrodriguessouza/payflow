@@ -19,26 +19,32 @@ import java.math.BigDecimal;
 @RequestMapping("/accounts")
 public class AccountController {
 
-    @Autowired
-    private GetAccountUseCase getAccountUseCase;
+    private final GetAccountUseCase getAccountUseCase;
+    private final AddAccountUseCase addAccountUseCase;
+    private final UpdateAccountUseCase updateAccountUseCase;
+    private final ChangeStatusUseCase changeStatusUseCase;
+    private final ImportCSVUseCase importCSVUseCase;
+    private final RemoveAccountUseCase removeAccountUseCase;
+    private final FindByDueDateAndDescriptionUseCase findByDueDateAndDescriptionUseCase;
+    private final FindTotalValuePaidByPeriodUseCase findTotalValuePaidByPeriodUseCase;
 
-    @Autowired
-    private AddAccountUseCase addAccountUseCase;
-
-    @Autowired
-    private UpdateAccountUseCase updateAccountUseCase;
-
-    @Autowired
-    private ChangeStatusUseCase changeStatusUseCase;
-
-    @Autowired
-    private ImportCSVUseCase importCSVUseCase;
-
-    @Autowired
-    private RemoveAccountUseCase removeAccountUseCase;
-
-    @Autowired
-    private FindByDueDateAndDescriptionUseCase findByDueDateAndDescriptionUseCase;
+    public AccountController(GetAccountUseCase getAccountUseCase,
+                             AddAccountUseCase addAccountUseCase,
+                             UpdateAccountUseCase updateAccountUseCase,
+                             ChangeStatusUseCase changeStatusUseCase,
+                             ImportCSVUseCase importCSVUseCase,
+                             RemoveAccountUseCase removeAccountUseCase,
+                             FindByDueDateAndDescriptionUseCase findByDueDateAndDescriptionUseCase,
+                             FindTotalValuePaidByPeriodUseCase findTotalValuePaidByPeriodUseCase) {
+        this.getAccountUseCase = getAccountUseCase;
+        this.addAccountUseCase = addAccountUseCase;
+        this.updateAccountUseCase = updateAccountUseCase;
+        this.changeStatusUseCase = changeStatusUseCase;
+        this.importCSVUseCase = importCSVUseCase;
+        this.removeAccountUseCase = removeAccountUseCase;
+        this.findByDueDateAndDescriptionUseCase = findByDueDateAndDescriptionUseCase;
+        this.findTotalValuePaidByPeriodUseCase = findTotalValuePaidByPeriodUseCase;
+    }
 
     @PostMapping
     public ResponseEntity<AccountDTO> addAccount(@RequestBody AccountDTO accountDTO) {
@@ -120,7 +126,7 @@ public class AccountController {
     public ResponseEntity<BigDecimal> findTotalValuePaidByPeriod(@RequestParam String startDate,
                                                                  @RequestParam String endDate) {
 
-        BigDecimal totalValuePaid = getAccountUseCase.findTotalValuePaidByPeriod(startDate, endDate);
+        BigDecimal totalValuePaid = findTotalValuePaidByPeriodUseCase.handle(startDate, endDate);
         return ResponseEntity.ok(totalValuePaid);
     }
 }
