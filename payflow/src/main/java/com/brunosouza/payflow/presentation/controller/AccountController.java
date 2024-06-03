@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 public class AccountController {
 
     @Autowired
-    private AccountUseCase accountUseCase;
+    private GetAccountUseCase getAccountUseCase;
 
     @Autowired
     private AddAccountUseCase addAccountUseCase;
@@ -37,6 +37,9 @@ public class AccountController {
     @Autowired
     private RemoveAccountUseCase removeAccountUseCase;
 
+    @Autowired
+    private FindByDueDateAndDescriptionUseCase findByDueDateAndDescriptionUseCase;
+
     @PostMapping
     public ResponseEntity<AccountDTO> addAccount(@RequestBody AccountDTO accountDTO) {
         AccountDTO createdAccount = addAccountUseCase.handle(accountDTO);
@@ -45,13 +48,13 @@ public class AccountController {
 
     @GetMapping
     public ResponseEntity<Page<AccountDTO>> getAllAccounts(Pageable pageable) {
-        Page<AccountDTO> accounts = accountUseCase.getAllAccounts(pageable);
+        Page<AccountDTO> accounts = getAccountUseCase.getAllAccounts(pageable);
         return ResponseEntity.ok(accounts);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) {
-        AccountDTO account = accountUseCase.getAccountById(id);
+        AccountDTO account = getAccountUseCase.getAccountById(id);
         if (account != null) {
             return ResponseEntity.ok(account);
         }
@@ -64,7 +67,7 @@ public class AccountController {
             @RequestParam(required = false) String description,
             Pageable pageable) {
 
-        Page<AccountDTO> accounts = accountUseCase.findByDueDateAndDescription(dueDate, description, pageable);
+        Page<AccountDTO> accounts = findByDueDateAndDescriptionUseCase.handle(dueDate, description, pageable);
 
         return ResponseEntity.ok(accounts);
     }
@@ -117,7 +120,7 @@ public class AccountController {
     public ResponseEntity<BigDecimal> findTotalValuePaidByPeriod(@RequestParam String startDate,
                                                                  @RequestParam String endDate) {
 
-        BigDecimal totalValuePaid = accountUseCase.findTotalValuePaidByPeriod(startDate, endDate);
+        BigDecimal totalValuePaid = getAccountUseCase.findTotalValuePaidByPeriod(startDate, endDate);
         return ResponseEntity.ok(totalValuePaid);
     }
 }
