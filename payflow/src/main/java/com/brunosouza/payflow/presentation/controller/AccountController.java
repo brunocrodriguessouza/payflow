@@ -2,6 +2,7 @@ package com.brunosouza.payflow.presentation.controller;
 
 import com.brunosouza.payflow.application.dto.AccountDTO;
 import com.brunosouza.payflow.application.usecase.account.AccountUseCase;
+import com.brunosouza.payflow.application.usecase.account.AddAccountUseCase;
 import com.brunosouza.payflow.application.usecase.account.ImportCSVUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,11 +25,14 @@ public class AccountController {
     private AccountUseCase accountUseCase;
 
     @Autowired
+    private AddAccountUseCase addAccountUseCase;
+
+    @Autowired
     private ImportCSVUseCase importCSVUseCase;
 
     @PostMapping
-    public ResponseEntity<AccountDTO> createAccount(@RequestBody AccountDTO accountDTO) {
-        AccountDTO createdAccount = accountUseCase.createAccount(accountDTO);
+    public ResponseEntity<AccountDTO> addAccount(@RequestBody AccountDTO accountDTO) {
+        AccountDTO createdAccount = addAccountUseCase.handle(accountDTO);
         return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
     }
 

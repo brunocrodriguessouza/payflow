@@ -17,7 +17,6 @@ import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ImportCSVUseCase {
@@ -36,7 +35,7 @@ public class ImportCSVUseCase {
         }
     }
 
-    private Account parseAccount(CSVRecord record) {
+    Account parseAccount(CSVRecord record) {
 
         List<String> values = record.stream().map(value -> Normalizer.normalize(value.trim(), Normalizer.Form.NFD)).toList();
 
@@ -47,9 +46,9 @@ public class ImportCSVUseCase {
         return Account.builder()
                 .dueDate(dueDate)
                 .paymentDate(paymentDate)
-                .value(new BigDecimal(values.get(2).trim()))
-                .description(values.get(3).trim())
-                .status(values.get(4).trim())
+                .value(new BigDecimal(values.get(2)))
+                .description(values.get(3))
+                .status(values.get(4))
                 .build();
     }
 }
