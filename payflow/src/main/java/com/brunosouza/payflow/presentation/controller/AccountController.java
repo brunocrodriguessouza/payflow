@@ -53,7 +53,7 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<AccountDTO>> getAllAccounts(Pageable pageable) {
+    public ResponseEntity<Page<AccountDTO>> getAllAccounts(Pageable pageable) throws AccountNotFoundException {
         Page<AccountDTO> accounts = getAccountUseCase.getAllAccounts(pageable);
         if (accounts.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -62,7 +62,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) {
+    public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) throws AccountNotFoundException {
         AccountDTO account = getAccountUseCase.getAccountById(id);
         if (account != null) {
             return ResponseEntity.ok(account);
@@ -83,31 +83,20 @@ public class AccountController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) throws AccountNotFoundException {
-        try{
-            removeAccountUseCase.handle(id);
-            return ResponseEntity.noContent().build();
-        }catch (AccountNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        removeAccountUseCase.handle(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AccountDTO> updateAccount(@PathVariable Long id, @RequestBody AccountDTO accountDTO) {
-        try {
-            AccountDTO accountDTOUpdated = updateAccountUseCase.handle(id, accountDTO);
-            return ResponseEntity.ok(accountDTOUpdated);
-        }catch (AccountNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<AccountDTO> updateAccount(@PathVariable Long id, @RequestBody AccountDTO accountDTO) throws AccountNotFoundException {
+        AccountDTO accountDTOUpdated = updateAccountUseCase.handle(id, accountDTO);
+        return ResponseEntity.ok(accountDTOUpdated);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<AccountDTO> changeAccountStatus(@PathVariable Long id, @RequestParam String status) throws AccountNotFoundException {
         AccountDTO changedAccount = changeStatusUseCase.handle(id, status);
-        if (changedAccount != null) {
-            return ResponseEntity.ok(changedAccount);
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(changedAccount);
     }
 
     @PostMapping("/upload")

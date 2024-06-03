@@ -4,12 +4,11 @@ import com.brunosouza.payflow.application.dto.AccountDTO;
 import com.brunosouza.payflow.domain.account.Account;
 import com.brunosouza.payflow.domain.account.AccountRepository;
 import com.brunosouza.payflow.domain.account.Status;
+import com.brunosouza.payflow.infraestructure.exception.AccountNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import javax.security.auth.login.AccountNotFoundException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -33,7 +32,7 @@ class ChangeStatusUseCaseTest {
     }
 
     @Test
-    void testHandle() throws AccountNotFoundException, com.brunosouza.payflow.infraestructure.exception.AccountNotFoundException {
+    void testHandle() throws AccountNotFoundException {
         // Given
         Long id = 1L;
         String status = "PAID";

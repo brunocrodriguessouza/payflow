@@ -2,13 +2,13 @@ package com.brunosouza.payflow.application.usecase.account;
 
 import com.brunosouza.payflow.domain.account.Account;
 import com.brunosouza.payflow.domain.account.AccountRepository;
+import com.brunosouza.payflow.infraestructure.exception.AccountNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

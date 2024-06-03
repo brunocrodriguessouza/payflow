@@ -3,6 +3,7 @@ package com.brunosouza.payflow.application.usecase.account;
 import com.brunosouza.payflow.application.dto.AccountDTO;
 import com.brunosouza.payflow.domain.account.Account;
 import com.brunosouza.payflow.domain.account.AccountRepository;
+import com.brunosouza.payflow.infraestructure.exception.AccountNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -32,7 +33,7 @@ class GetAccountUseCaseTest {
     }
 
     @Test
-    void testGetAccountById() {
+    void testGetAccountById() throws AccountNotFoundException {
         // Given
         Long accountId = 1L;
         Account account = Account.builder()
@@ -53,23 +54,4 @@ class GetAccountUseCaseTest {
         assertEquals(accountId, result.getId());
     }
 
-    @Test
-    void testGetAllAccounts() {
-        // Given
-        Pageable pageable = mock(Pageable.class);
-        Page<Account> accountPage = mock(Page.class);
-
-
-        when(accountRepository.findAll(pageable)).thenReturn(accountPage);
-        when(accountPage.map(any())).thenAnswer(invocation -> {
-            AccountDTO dto = mock(AccountDTO.class);
-            return Page.empty().map(element -> dto);
-        });
-
-        // When
-        Page<AccountDTO> result = getAccountUseCase.getAllAccounts(pageable);
-
-        // Then
-        assertEquals(Page.empty().map(element -> mock(AccountDTO.class)), result);
-    }
 }

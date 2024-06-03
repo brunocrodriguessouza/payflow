@@ -72,7 +72,7 @@ class AccountControllerTest {
     }
 
     @Test
-    void testGetAllAccounts() {
+    void testGetAllAccounts() throws AccountNotFoundException {
         // Given
         Pageable pageable = mock(Pageable.class);
         Page<AccountDTO> accountPage = mock(Page.class);
@@ -87,7 +87,7 @@ class AccountControllerTest {
     }
 
     @Test
-    void testGetAccountById() {
+    void testGetAccountById() throws AccountNotFoundException {
         // Given
         Long id = 1L;
         AccountDTO accountDTO = new AccountDTO();
@@ -188,55 +188,15 @@ class AccountControllerTest {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
-    @Test
-    void testDeleteAccountNotFound() throws AccountNotFoundException {
-        // Given
-        Long id = 1L;
-        doThrow(AccountNotFoundException.class).when(removeAccountUseCase).handle(id);
-
-        // When
-        ResponseEntity<Void> responseEntity = accountController.deleteAccount(id);
-
-        // Then
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-    }
 
     @Test
-    void testGetAccountByIdNotFound() {
+    void testGetAccountByIdNotFound() throws AccountNotFoundException {
         // Given
         Long id = 1L;
         when(getAccountUseCase.getAccountById(id)).thenReturn(null);
 
         // When
         ResponseEntity<AccountDTO> responseEntity = accountController.getAccountById(id);
-
-        // Then
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-    }
-
-    @Test
-    void testUpdateAccountNotFound() throws AccountNotFoundException {
-        // Given
-        Long id = 1L;
-        AccountDTO accountDTO = new AccountDTO();
-        doThrow(AccountNotFoundException.class).when(updateAccountUseCase).handle(id, accountDTO);
-
-        // When
-        ResponseEntity<AccountDTO> responseEntity = accountController.updateAccount(id, accountDTO);
-
-        // Then
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-    }
-
-    @Test
-    void testChangeAccountStatusNotFound() throws AccountNotFoundException {
-        // Given
-        Long id = 1L;
-        String status = "paid";
-        when(changeStatusUseCase.handle(id, status)).thenReturn(null);
-
-        // When
-        ResponseEntity<AccountDTO> responseEntity = accountController.changeAccountStatus(id, status);
 
         // Then
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());

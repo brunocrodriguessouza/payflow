@@ -22,7 +22,7 @@
 //                        .requestMatchers("/api/**").permitAll()
 //                        .anyRequest().authenticated()
 //                )
-//                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+//                .form(AbstractAuthenticationFilterConfigurer::permitAll)
 //                .logout(LogoutConfigurer::permitAll);
 //        return http.build();
 //    }

@@ -5,21 +5,19 @@ import com.brunosouza.payflow.domain.account.Account;
 import com.brunosouza.payflow.domain.account.AccountRepository;
 import com.brunosouza.payflow.domain.account.Status;
 import com.brunosouza.payflow.infraestructure.AccountMapper;
+import com.brunosouza.payflow.infraestructure.exception.AccountNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.security.auth.login.AccountNotFoundException;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static com.brunosouza.payflow.infraestructure.AccountMapper.convertToDTO;
-import static com.brunosouza.payflow.infraestructure.AccountMapper.convertToEntity;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
