@@ -33,7 +33,7 @@ class ChangeStatusUseCaseTest {
     }
 
     @Test
-    void testHandle() throws AccountNotFoundException {
+    void testHandle() throws AccountNotFoundException, com.brunosouza.payflow.infraestructure.exception.AccountNotFoundException {
         // Given
         Long id = 1L;
         String status = "PAID";
