@@ -17,15 +17,13 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             Pageable pageable
     );
 
-    Page<Account> findByDescriptionContaining(@Param("description") String description, Pageable pageable);
+    Page<Account> findByDescriptionContaining(String description, Pageable pageable);
 
-    Page<Account> findByDueDate(@Param("dueDate") LocalDate dueDate, Pageable pageable);
+    Page<Account> findByDueDate(LocalDate dueDate, Pageable pageable);
 
     Page<Account> findAll(Pageable pageable);
 
     @Query("SELECT SUM(a.value) FROM Account a WHERE a.paymentDate BETWEEN :startDate AND :endDate")
     BigDecimal findTotalValuePaidByPeriod(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT a FROM Account a WHERE (:dueDate IS NULL OR a.dueDate = :dueDate) AND (:description IS NULL OR lower(a.description) LIKE lower(concat('%', :description, '%')))")
-    Page<Account> findByDueDateAndDescription(LocalDate dueDate, String description, Pageable pageable);
 }

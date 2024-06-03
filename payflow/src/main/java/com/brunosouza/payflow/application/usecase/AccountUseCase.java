@@ -9,8 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -18,6 +21,8 @@ public class AccountUseCase {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public AccountDTO createAccount(AccountDTO accountDTO) {
         Account account = Account.builder()
@@ -31,7 +36,7 @@ public class AccountUseCase {
         return toDTO(account);
     }
 
-    public AccountDTO updateAccount(Long id, AccountDTO accountDTO) {
+    public AccountDTO updateAccount(Long id, AccountDTO accountDTO) throws AccountNotFoundException {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         if (optionalAccount.isPresent()) {
             Account account = Account.builder()
@@ -44,8 +49,9 @@ public class AccountUseCase {
                     .build();
             account = accountRepository.save(account);
             return toDTO(account);
+        }else{
+            throw new AccountNotFoundException("Account not found with id " + id);
         }
-        return null;
     }
 
     public void deleteAccount(Long id) {
@@ -76,8 +82,30 @@ public class AccountUseCase {
         return accountRepository.findTotalValuePaidByPeriod(startDate, endDate);
     }
 
-    public Page<AccountDTO> findByDueDateAndDescription(LocalDate dueDate, String description, Pageable pageable) {
-        return accountRepository.findByDueDateAndDescription(dueDate, description, pageable).map(this::toDTO);
+    public Page<AccountDTO> findByDueDateAndDescription(String dueDate, String description, Pageable pageable) {
+
+        boolean dueDateProvided = !Objects.isNull(dueDate) && !dueDate.isEmpty();
+        boolean descriptionProvided = !Objects.isNull(description) && !description.isEmpty();
+
+
+        if (dueDateProvided && descriptionProvided) {
+            LocalDate parsedDueDate = LocalDate.parse(dueDate, formatter);
+            return accountRepository.findByDueDateAndDescriptionContaining(parsedDueDate, description, pageable)
+                    .map(this::toDTO);
+        }
+
+        if (descriptionProvided) {
+            return accountRepository.findByDescriptionContaining(description, pageable)
+                    .map(this::toDTO);
+        }
+
+        if (dueDateProvided) {
+            LocalDate parsedDueDate = LocalDate.parse(dueDate, formatter);
+            return accountRepository.findByDueDate(parsedDueDate, pageable)
+                    .map(this::toDTO);
+        }
+
+        return accountRepository.findAll(pageable).map(this::toDTO);
     }
 
     private AccountDTO toDTO(Account account) {
@@ -90,4 +118,5 @@ public class AccountUseCase {
                 .status(Status.valueOf(account.getStatus()))
                 .build();
     }
+
 }

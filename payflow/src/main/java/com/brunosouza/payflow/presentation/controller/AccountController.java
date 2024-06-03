@@ -9,11 +9,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+//import org.springframework.security.access.annotation.Secured;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 @RestController
@@ -49,7 +53,7 @@ public class AccountController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<AccountDTO>> findByDueDateAndDescription(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dueDate,
+            @RequestParam(required = false) String dueDate,
             @RequestParam(required = false) String description,
             Pageable pageable) {
 
@@ -64,7 +68,17 @@ public class AccountController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}/change-status")
+    @PutMapping("/{id}")
+    public ResponseEntity<AccountDTO> changeAccount(@PathVariable Long id, @RequestBody AccountDTO accountDTO) {
+        try {
+            AccountDTO accountDTOUpdated = accountUseCase.updateAccount(id, accountDTO);
+            return ResponseEntity.ok(accountDTOUpdated);
+        } catch (AccountNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PatchMapping("/{id}")
     public ResponseEntity<AccountDTO> changeAccountStatus(@PathVariable Long id, @RequestParam String status) {
         AccountDTO changedAccount = accountUseCase.changeAccountStatus(id, status);
         if (changedAccount != null) {
