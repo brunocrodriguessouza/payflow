@@ -45,15 +45,17 @@ flyway {
 	locations = ['filesystem:src/main/resources/db/migration'] // Localização dos scripts de migração
 }
 
+test {
+	exclude '**/PayFlowApplication.java'
+}
+
 task setPermissions(type: Exec) {
 	commandLine 'chmod', '-R', '755', 'build'
 }
 
-// Tarefa customizada para copiar o arquivo JAR gerado para um diretório específico
 task copyJar(type: Copy) {
 	from bootJar
 	into 'build/libs'
 }
 
-// Configura a tarefa 'build' para depender da tarefa 'copyJar'
 build.dependsOn copyJar
