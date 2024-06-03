@@ -1,4 +1,4 @@
-package com.brunosouza.payflow.application.service;
+package com.brunosouza.payflow.application.usecase.account;
 
 import com.brunosouza.payflow.domain.account.Account;
 import com.brunosouza.payflow.domain.account.AccountRepository;
@@ -20,16 +20,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AccountService {
-
-    private final AccountRepository accountRepository;
+public class ImportCSVUseCase {
 
     @Autowired
-    public AccountService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
+    private AccountRepository accountRepository;
 
-    public void importAccountsFromCSV(MultipartFile file) throws IOException {
+    public void handle(MultipartFile file) throws IOException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
 
@@ -42,7 +38,7 @@ public class AccountService {
 
     private Account parseAccount(CSVRecord record) {
 
-        List<String> values = record.stream().map(value -> Normalizer.normalize(value.trim(), Normalizer.Form.NFD)).collect(Collectors.toList());
+        List<String> values = record.stream().map(value -> Normalizer.normalize(value.trim(), Normalizer.Form.NFD)).toList();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 

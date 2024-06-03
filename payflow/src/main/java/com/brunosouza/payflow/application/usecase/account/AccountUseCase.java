@@ -1,4 +1,4 @@
-package com.brunosouza.payflow.application.usecase;
+package com.brunosouza.payflow.application.usecase.account;
 
 import com.brunosouza.payflow.application.dto.AccountDTO;
 import com.brunosouza.payflow.domain.account.Account;
@@ -58,15 +58,16 @@ public class AccountUseCase {
         accountRepository.deleteById(id);
     }
 
-    public AccountDTO changeAccountStatus(Long id, String status) {
+    public AccountDTO changeAccountStatus(Long id, String status) throws AccountNotFoundException {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
             account.setStatus(status);
             account = accountRepository.save(account);
             return toDTO(account);
+        }else{
+            throw new AccountNotFoundException("Account not found with id " + id);
         }
-        return null;
     }
 
     public AccountDTO getAccountById(Long id) {
@@ -78,8 +79,11 @@ public class AccountUseCase {
         return accountRepository.findAll(pageable).map(this::toDTO);
     }
 
-    public BigDecimal findTotalValuePaidByPeriod(LocalDate startDate, LocalDate endDate) {
-        return accountRepository.findTotalValuePaidByPeriod(startDate, endDate);
+    public BigDecimal findTotalValuePaidByPeriod(String startDate, String endDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDt = LocalDate.parse(startDate, formatter);
+        LocalDate endDt = LocalDate.parse(endDate, formatter);
+        return accountRepository.findTotalValuePaidByPeriod(startDt, endDt);
     }
 
     public Page<AccountDTO> findByDueDateAndDescription(String dueDate, String description, Pageable pageable) {

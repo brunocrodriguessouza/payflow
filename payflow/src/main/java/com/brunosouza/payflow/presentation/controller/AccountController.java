@@ -1,23 +1,19 @@
 package com.brunosouza.payflow.presentation.controller;
 
 import com.brunosouza.payflow.application.dto.AccountDTO;
-import com.brunosouza.payflow.application.service.AccountService;
-import com.brunosouza.payflow.application.usecase.AccountUseCase;
+import com.brunosouza.payflow.application.usecase.account.AccountUseCase;
+import com.brunosouza.payflow.application.usecase.account.ImportCSVUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.annotation.Secured;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Objects;
+import java.math.BigDecimal;
 
 
 @RestController
@@ -28,7 +24,7 @@ public class AccountController {
     private AccountUseCase accountUseCase;
 
     @Autowired
-    private AccountService accountService;
+    private ImportCSVUseCase importCSVUseCase;
 
     @PostMapping
     public ResponseEntity<AccountDTO> createAccount(@RequestBody AccountDTO accountDTO) {
@@ -79,7 +75,7 @@ public class AccountController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AccountDTO> changeAccountStatus(@PathVariable Long id, @RequestParam String status) {
+    public ResponseEntity<AccountDTO> changeAccountStatus(@PathVariable Long id, @RequestParam String status) throws AccountNotFoundException {
         AccountDTO changedAccount = accountUseCase.changeAccountStatus(id, status);
         if (changedAccount != null) {
             return ResponseEntity.ok(changedAccount);
@@ -94,11 +90,19 @@ public class AccountController {
         }
 
         try {
-            accountService.importAccountsFromCSV(file);
+            importCSVUseCase.handle(file);
             return ResponseEntity.ok("File " + file.getOriginalFilename() + " was uploaded and processed successfully");
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body("Error processing the file: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/total-value")
+    public ResponseEntity<BigDecimal> findTotalValuePaidByPeriod(@RequestParam String startDate,
+                                                                 @RequestParam String endDate) {
+
+        BigDecimal totalValuePaid = accountUseCase.findTotalValuePaidByPeriod(startDate, endDate);
+        return ResponseEntity.ok(totalValuePaid);
     }
 }
