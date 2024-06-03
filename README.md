@@ -39,5 +39,6 @@ Neste desafio, você será responsável por implementar uma API REST para um sis
 
 ---
 
-**Observação:** Certifique-se de cumprir todos os requisitos especificados neste desafio. Siga as melhores práticas de desenvolvimento de software, documentando seu código e fornecendo uma cobertura de teste adequada. Boa sorte!
+![image](https://github.com/brunocrodriguessouza/payflow/assets/1760665/aa953f27-2604-43d7-8472-ea48653863cf)
+
 
