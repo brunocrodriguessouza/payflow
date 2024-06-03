@@ -4,11 +4,13 @@ import com.brunosouza.payflow.application.dto.AccountDTO;
 import com.brunosouza.payflow.domain.account.Account;
 import com.brunosouza.payflow.domain.account.AccountRepository;
 import com.brunosouza.payflow.domain.account.Status;
+import com.brunosouza.payflow.infraestructure.AccountMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

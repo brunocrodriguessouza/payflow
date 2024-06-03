@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,50 +23,9 @@ public class AccountUseCase {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public AccountDTO createAccount(AccountDTO accountDTO) {
-        Account account = Account.builder()
-                .dueDate(accountDTO.getDueDate())
-                .paymentDate(accountDTO.getPaymentDate())
-                .value(accountDTO.getValue())
-                .description(accountDTO.getDescription())
-                .status(accountDTO.getStatus().toString())
-                .build();
-        account = accountRepository.save(account);
-        return toDTO(account);
-    }
-
-    public AccountDTO updateAccount(Long id, AccountDTO accountDTO) throws AccountNotFoundException {
-        Optional<Account> optionalAccount = accountRepository.findById(id);
-        if (optionalAccount.isPresent()) {
-            Account account = Account.builder()
-                    .id(id)
-                    .dueDate(accountDTO.getDueDate())
-                    .paymentDate(accountDTO.getPaymentDate())
-                    .value(accountDTO.getValue())
-                    .description(accountDTO.getDescription())
-                    .status(accountDTO.getStatus().toString())
-                    .build();
-            account = accountRepository.save(account);
-            return toDTO(account);
-        }else{
-            throw new AccountNotFoundException("Account not found with id " + id);
-        }
-    }
 
     public void deleteAccount(Long id) {
         accountRepository.deleteById(id);
-    }
-
-    public AccountDTO changeAccountStatus(Long id, String status) throws AccountNotFoundException {
-        Optional<Account> optionalAccount = accountRepository.findById(id);
-        if (optionalAccount.isPresent()) {
-            Account account = optionalAccount.get();
-            account.setStatus(status);
-            account = accountRepository.save(account);
-            return toDTO(account);
-        }else{
-            throw new AccountNotFoundException("Account not found with id " + id);
-        }
     }
 
     public AccountDTO getAccountById(Long id) {
@@ -90,7 +48,6 @@ public class AccountUseCase {
 
         boolean dueDateProvided = !Objects.isNull(dueDate) && !dueDate.isEmpty();
         boolean descriptionProvided = !Objects.isNull(description) && !description.isEmpty();
-
 
         if (dueDateProvided && descriptionProvided) {
             LocalDate parsedDueDate = LocalDate.parse(dueDate, formatter);

@@ -1,9 +1,7 @@
 package com.brunosouza.payflow.presentation.controller;
 
 import com.brunosouza.payflow.application.dto.AccountDTO;
-import com.brunosouza.payflow.application.usecase.account.AccountUseCase;
-import com.brunosouza.payflow.application.usecase.account.AddAccountUseCase;
-import com.brunosouza.payflow.application.usecase.account.ImportCSVUseCase;
+import com.brunosouza.payflow.application.usecase.account.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +24,12 @@ public class AccountController {
 
     @Autowired
     private AddAccountUseCase addAccountUseCase;
+
+    @Autowired
+    private UpdateAccountUseCase updateAccount;
+
+    @Autowired
+    private ChangeStatusUseCase changeStatusUseCase;
 
     @Autowired
     private ImportCSVUseCase importCSVUseCase;
@@ -69,9 +73,9 @@ public class AccountController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AccountDTO> changeAccount(@PathVariable Long id, @RequestBody AccountDTO accountDTO) {
+    public ResponseEntity<AccountDTO> updateAccount(@PathVariable Long id, @RequestBody AccountDTO accountDTO) {
         try {
-            AccountDTO accountDTOUpdated = accountUseCase.updateAccount(id, accountDTO);
+            AccountDTO accountDTOUpdated = updateAccount.handle(id, accountDTO);
             return ResponseEntity.ok(accountDTOUpdated);
         } catch (AccountNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -80,7 +84,7 @@ public class AccountController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<AccountDTO> changeAccountStatus(@PathVariable Long id, @RequestParam String status) throws AccountNotFoundException {
-        AccountDTO changedAccount = accountUseCase.changeAccountStatus(id, status);
+        AccountDTO changedAccount = changeStatusUseCase.handle(id, status);
         if (changedAccount != null) {
             return ResponseEntity.ok(changedAccount);
         }

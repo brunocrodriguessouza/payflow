@@ -35,14 +35,16 @@ public class ImportCSVUseCase {
         }
     }
 
-    Account parseAccount(CSVRecord record) {
-
-        List<String> values = record.stream().map(value -> Normalizer.normalize(value.trim(), Normalizer.Form.NFD)).toList();
+    private Account parseAccount(CSVRecord record) {
+        List<String> values = record.stream()
+                .map(value -> Normalizer.normalize(value.trim(), Normalizer.Form.NFD))
+                .toList();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         LocalDate dueDate = LocalDate.parse(values.get(0), formatter);
         LocalDate paymentDate = LocalDate.parse(values.get(1), formatter);
+
         return Account.builder()
                 .dueDate(dueDate)
                 .paymentDate(paymentDate)
